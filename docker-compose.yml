@@ -7,7 +7,6 @@ services:
     depends_on:
       - mongo
     volumes:
-      - 'node_modules:/srv/librotenado/node_modules'
       - './:/srv/librotenado:cached'
   mongo:
     image: mongo
@@ -17,5 +16,4 @@ services:
       - 'mongo:/data/db'
 
 volumes:
-  node_modules:
   mongo:
