@@ -5,12 +5,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const configDB = require("./config/database");
+const userRoutes = require("./api/routes/user");
 
-mongoose.connect(
-    configDB.url,
-    {
-        useMongoClient: true
-    });
+mongoose.connect(configDB.url);
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -28,11 +25,11 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/user", userRoutes);
+
 app.use((req, res, next) => {
-    res.status(200);
-    res.json({
-        message: "Hello World"
-    });
+    const error = new Error("Not found");
+    error.status = 404;
 });
 
 module.exports = app;
