@@ -1,0 +1,18 @@
+version: "3"
+services:
+  nodejs:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - 'node_modules:/srv/librotenado/node_modules'
+      - './:/srv/librotenado:cached'
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
+
+volumes:
+  node_modules:
