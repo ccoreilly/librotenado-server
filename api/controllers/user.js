@@ -108,7 +108,8 @@ exports.login = (req, res, next) => {
                     return res.status(200).json({
                         status: "OK",
                         message: "Authorization successful",
-                        token: token
+                        token: token,
+                        profile_url: "/user/" + user[0]._id
                     });
                 }
                 res.status(401).json({
