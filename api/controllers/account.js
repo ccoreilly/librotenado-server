@@ -69,6 +69,7 @@ exports.update = (req, res, next) => {
                     .exec()
                     .then(result => {
                         res.status(200).json({
+                            status: "OK",
                             message: "Account updated",
                             request: {
                                 type: "GET",
