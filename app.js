@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const configDB = require("./config/database");
 const userRoutes = require("./api/routes/user");
 const accountRoutes = require("./api/routes/account");
+const transactionRoutes = require("./api/routes/transaction");
 
 mongoose.connect(configDB.url);
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use("/user", userRoutes);
 app.use("/account", accountRoutes);
+app.use("/transaction", transactionRoutes);
 
 app.use((req, res, next) => {
     const error = new Error("Not found");
