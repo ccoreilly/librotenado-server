@@ -16,7 +16,10 @@ exports.create = (req, res, next) => {
           return res.status(201).json({
               status: "OK",
               message: "Account created",
-              profile_url: "/account/" + result._id
+              request: {
+                  type: "GET",
+                  url: "/account/" + result._id
+              }
           });
       })
       .catch(err => {
@@ -46,4 +49,46 @@ exports.details = (req, res, next) => {
               });
           }
       });
+};
+
+exports.update = (req, res, next) => {
+    const id = req.params.accountId;
+    Account.findById(id)
+        .exec()
+        .then(account => {
+            if (account.owners.indexOf(req.userData.userId) > -1) {
+                const updateOps = {};
+                for (const ops of req.body) {
+                    updateOps[ops.propName] = ops.value;
+                }
+                if (typeof updateOps["owners"] !== 'undefined') {
+                    if (updateOps["owners"].indexOf(req.userData.userId) === -1) {
+                        updateOps["owners"].push(req.userData.userId);
+                    }
+                }
+                Account.update({_id: id}, {$set: updateOps})
+                    .exec()
+                    .then(result => {
+                        res.status(200).json({
+                            message: "Account updated",
+                            request: {
+                                type: "GET",
+                                url: "/account/" + id
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
 };
